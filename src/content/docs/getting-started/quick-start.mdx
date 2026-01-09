@@ -50,21 +50,20 @@ Recent entries:
 
 ## Create a Commit
 
-After making your code changes, create an AGIT commit:
+After making your code changes, stage and commit with AGIT:
 
 ```bash
-# First, commit your code with git
+# Stage your changes
 git add .
-git commit -m "Add user authentication"
 
-# Then create the neural commit
+# Create both git commit and neural commit in one command
 agit commit -m "Add user authentication"
 ```
 
 Output:
 ```
+Created git commit:    e8d4f1a
 Created neural commit: a3f7b2c
-Linked to git commit:  e8d4f1a
 
 Summary: Intent: Planning to add user authentication.
 ```

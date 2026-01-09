@@ -14,12 +14,13 @@ agit commit --message <message>
 
 ## Description
 
-Creates a neural commit that:
+Creates both a git commit and a neural commit:
 1. Reads all entries from the staging area
 2. Synthesizes a summary from intents and reasoning
-3. Creates a content-addressable commit object
-4. Links to the current Git HEAD commit
-5. Clears the staging area
+3. Creates a git commit from staged changes (if any)
+4. Creates a content-addressable neural commit object
+5. Links the neural commit to the git commit
+6. Clears the staging area
 
 ## Options
 
@@ -39,8 +40,8 @@ agit commit -m "Add user authentication"
 
 Output:
 ```
+Created git commit:    e8d4f1a
 Created neural commit: a3f7b2c
-Linked to git commit:  e8d4f1a
 
 Summary: Intent: Add user authentication. Plan: Implement JWT-based auth with refresh tokens.
 ```
@@ -121,9 +122,10 @@ Commit message required. Use -m or --message
 
 ## Best Practices
 
-1. **Commit after logical units**: Create neural commits at the same time as git commits
+1. **Commit after logical units**: Use `agit commit` to create both git and neural commits in one step
 2. **Use clear messages**: The message helps find commits later
 3. **Review before committing**: Run `agit status` first to check entries
+4. **Stage first**: Run `git add .` before `agit commit` to include your changes
 
 ## See Also
 

@@ -77,17 +77,16 @@ AGIT works alongside Git, not replacing it:
 2. **Linked Commits**: Neural commits reference git commits
 3. **Branch Tracking**: AGIT follows your git branches
 
-### Recommended Git Workflow
+### Recommended Workflow
 
 ```bash
 # 1. Work on your feature with AI assistance
 #    (AI automatically logs thoughts)
 
-# 2. Stage and commit code
+# 2. Stage changes
 git add .
-git commit -m "Add feature X"
 
-# 3. Create neural commit
+# 3. Commit with AGIT (creates git + neural commit)
 agit commit -m "Add feature X"
 ```
 
