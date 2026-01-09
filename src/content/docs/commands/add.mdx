@@ -1,0 +1,90 @@
+---
+title: agit add
+description: Stage files and freeze context for commit
+---
+
+Stage files for commit and freeze the current thought context.
+
+## Usage
+
+```bash
+agit add .
+agit add <path>
+```
+
+## Description
+
+`agit add` does two things:
+1. **Stages git files** - Same as `git add`
+2. **Freezes context** - Copies current thoughts to staged-index
+
+Thoughts recorded AFTER `agit add` go to a fresh index for the next commit.
+
+## Arguments
+
+| Argument | Default | Description |
+|----------|---------|-------------|
+| `pathspec` | `.` | Files or patterns to stage |
+
+## Examples
+
+### Stage All Changes
+
+```bash
+agit add .
+```
+
+### Stage Specific Directory
+
+```bash
+agit add src/
+```
+
+### Workflow
+
+```bash
+# Record thoughts while working
+agit record "Planning auth refactor"
+
+# Stage files - freezes context
+agit add .
+
+# This thought goes to NEXT commit
+agit record "Future: add more tests"
+
+# Commit uses only pre-staging thoughts
+agit commit -m "Refactor auth"
+```
+
+## Output
+
+```bash
+$ agit add .
+  add: src/main.rs
+  add: src/lib.rs
+
+Staged 2 file(s) for commit.
+Frozen 3 thought(s) for next commit.
+```
+
+## Why Freeze Context?
+
+This ensures the thoughts captured during development are linked to the exact files being committed, not thoughts recorded afterward.
+
+Without freezing:
+```
+thought A → git add → thought B → commit (includes A + B)
+```
+
+With freezing:
+```
+thought A → agit add → thought B → commit (includes only A)
+```
+
+Thought B is preserved for the next commit cycle.
+
+## See Also
+
+- [agit commit](/commands/commit/) - Create commit with staged context
+- [agit status](/commands/status/) - View staged and pending thoughts
+- [agit record](/commands/record/) - Manually record thoughts
