@@ -1,0 +1,132 @@
+---
+title: agit commit
+description: Create a neural commit with reasoning context
+---
+
+Create a neural commit that links reasoning to your code changes.
+
+## Usage
+
+```bash
+agit commit -m <message>
+agit commit --message <message>
+```
+
+## Description
+
+Creates a neural commit that:
+1. Reads all entries from the staging area
+2. Synthesizes a summary from intents and reasoning
+3. Creates a content-addressable commit object
+4. Links to the current Git HEAD commit
+5. Clears the staging area
+
+## Options
+
+| Option | Required | Description |
+|--------|----------|-------------|
+| `-m`, `--message` | Yes | Commit message |
+| `--amend` | No | Amend the previous neural commit |
+| `--edit-summary` | No | Edit the synthesized summary before committing |
+
+## Examples
+
+### Basic Commit
+
+```bash
+agit commit -m "Add user authentication"
+```
+
+Output:
+```
+Created neural commit: a3f7b2c
+Linked to git commit:  e8d4f1a
+
+Summary: Intent: Add user authentication. Plan: Implement JWT-based auth with refresh tokens.
+```
+
+### View Summary Before Committing
+
+```bash
+agit commit -m "Refactor API" --edit-summary
+```
+
+This shows the synthesized summary and lets you modify it.
+
+## How Summaries Work
+
+AGIT synthesizes summaries from your staging area entries:
+
+1. **Finds last user intent**: The most recent `user/intent` entry
+2. **Finds last AI reasoning**: The most recent `ai/reasoning` entry
+3. **Combines them**: "Intent: X. Plan: Y."
+
+### Example
+
+Staging area:
+```
+[10:30] user/intent: Fix authentication bug
+[10:31] ai/reasoning: Add null check before token validation
+[10:35] user/intent: Also add rate limiting
+[10:36] ai/reasoning: Use express-rate-limit middleware
+```
+
+Synthesized summary:
+```
+Intent: Also add rate limiting. Plan: Use express-rate-limit middleware.
+```
+
+(Uses the *last* intent and reasoning)
+
+## Commit Object Structure
+
+Neural commits are stored as JSON:
+
+```json
+{
+  "hash": "a3f7b2c...",
+  "message": "Add user authentication",
+  "summary": "Intent: Add auth. Plan: JWT with refresh tokens.",
+  "git_commit": "e8d4f1a...",
+  "parent": "previous-neural-hash",
+  "trace_hash": "hash-of-full-trace",
+  "timestamp": "2024-01-15T10:45:00Z"
+}
+```
+
+## Requirements
+
+- AGIT must be initialized
+- Git repository must have at least one commit
+- Staging area should have entries (or use `--amend`)
+
+## Errors
+
+### No Entries in Staging
+
+```
+No thoughts recorded in staging area.
+Use 'agit record' to add thoughts, or the MCP server will log them automatically.
+```
+
+**Solution**: Record some thoughts first with `agit record` or use an MCP-enabled editor.
+
+### Message Required
+
+```
+Commit message required. Use -m or --message
+```
+
+**Solution**: Provide a message with `-m "Your message"`.
+
+## Best Practices
+
+1. **Commit after logical units**: Create neural commits at the same time as git commits
+2. **Use clear messages**: The message helps find commits later
+3. **Review before committing**: Run `agit status` first to check entries
+
+## See Also
+
+- [agit status](/commands/status/) - Check staging area before committing
+- [agit log](/commands/log/) - View commit history
+- [agit show](/commands/show/) - View full commit details

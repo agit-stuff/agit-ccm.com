@@ -1,0 +1,140 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+---
+
+<StarlightPage frontmatter={{ title: 'AGIT - AI-Native Git Wrapper', template: 'splash' }}>
+  <div class="hero">
+    <img src="/agit-logo.svg" alt="AGIT Logo" class="hero-logo" />
+    <h1>AGIT</h1>
+    <p class="hero-tagline">"Code is the Artifact. Context is the Source."</p>
+    <p class="hero-description">
+      Capture the <strong>reasoning context</strong> (Why/How) alongside your <strong>code changes</strong> (What).
+      AGIT creates a "Neural Graph" parallel to Git's commit graph, giving you a complete history of
+      not just what changed, but <em>why</em> it changed and <em>how</em> the decision was made.
+    </p>
+    <div class="hero-buttons">
+      <a href="/getting-started/installation/" class="cta-button">Get Started</a>
+      <a href="https://github.com/agit-stuff/agit" class="cta-button secondary">View on GitHub</a>
+    </div>
+  </div>
+
+  <div class="terminal">
+    <div class="terminal-header">
+      <span class="terminal-dot red"></span>
+      <span class="terminal-dot yellow"></span>
+      <span class="terminal-dot green"></span>
+    </div>
+    <div class="terminal-body">
+      <span class="terminal-line">
+        <span class="terminal-prompt">$</span>
+        <span class="terminal-command"> agit init</span>
+      </span>
+      <span class="terminal-line terminal-output">Initialized AGIT in /your-project/.agit</span>
+      <span class="terminal-line terminal-output">Created: .cursorrules, CLAUDE.md, .windsurfrules</span>
+      <span class="terminal-line">&nbsp;</span>
+      <span class="terminal-line">
+        <span class="terminal-prompt">$</span>
+        <span class="terminal-command"> agit record "Planning to refactor auth module"</span>
+      </span>
+      <span class="terminal-line terminal-output">Recorded thought to staging area</span>
+      <span class="terminal-line">&nbsp;</span>
+      <span class="terminal-line">
+        <span class="terminal-prompt">$</span>
+        <span class="terminal-command"> agit commit -m "Refactor auth module"</span>
+      </span>
+      <span class="terminal-line terminal-output">Created neural commit: a3f7b2c</span>
+      <span class="terminal-line terminal-output">Linked to git commit:  e8d4f1a</span>
+      <span class="terminal-line terminal-output">Summary: Intent: Refactor auth module. Plan: Add try/catch around token validation.</span>
+      <span class="terminal-line">
+        <span class="terminal-prompt">$</span>
+        <span class="cursor"></span>
+      </span>
+    </div>
+  </div>
+
+  <section class="features">
+    <h2>Why AGIT?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <h3>Seamless Integration</h3>
+        <p>Works with Cursor, Claude Code, Windsurf, and other AI coding assistants. Your AI automatically logs thoughts via MCP.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Zero Configuration</h3>
+        <p>Just run <code>agit init</code> and you're ready. Auto-generates config files for all major AI editors.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <h3>Neural Graph</h3>
+        <p>Creates a parallel graph of reasoning alongside Git's commit graph. Query the "why" behind any change.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔧</div>
+        <h3>Git Compatible</h3>
+        <p>Built on libgit2, works alongside your existing Git workflow. Not a replacement—an enhancement.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2>How It Works</h2>
+    <div class="how-it-works">
+      <div class="feature-card">
+        <h3>The "Seamless Echo" Strategy</h3>
+        <p>Unlike traditional tools that call LLMs, AGIT inverts the flow. Your <strong>AI editor</strong> pushes context to AGIT via MCP:</p>
+        <ol style="text-align: left; margin-top: 1rem; line-height: 1.8;">
+          <li><strong>User asks:</strong> "Fix the auth bug"</li>
+          <li><strong>AI logs intent:</strong> <code>agit_log_step(role="user", ...)</code></li>
+          <li><strong>AI plans:</strong> "I'll add a try/catch block"</li>
+          <li><strong>AI logs plan:</strong> <code>agit_log_step(role="ai", ...)</code></li>
+          <li><strong>User commits:</strong> <code>agit commit -m "Fix auth bug"</code></li>
+          <li><strong>AGIT synthesizes:</strong> Links Intent + Plan to git commit</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" style="text-align: center;">
+    <h2>Quick Install</h2>
+    <div class="terminal" style="max-width: 600px; margin: 0 auto;">
+      <div class="terminal-header">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+      </div>
+      <div class="terminal-body">
+        <span class="terminal-line">
+          <span class="terminal-prompt">#</span>
+          <span class="terminal-output"> macOS</span>
+        </span>
+        <span class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-command"> brew tap agit-stuff/agit && brew install agit</span>
+        </span>
+        <span class="terminal-line">&nbsp;</span>
+        <span class="terminal-line">
+          <span class="terminal-prompt">#</span>
+          <span class="terminal-output"> Linux / CI</span>
+        </span>
+        <span class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-command"> curl -fsSL https://agit.dev/install.sh | bash</span>
+        </span>
+        <span class="terminal-line">&nbsp;</span>
+        <span class="terminal-line">
+          <span class="terminal-prompt">#</span>
+          <span class="terminal-output"> Windows (PowerShell)</span>
+        </span>
+        <span class="terminal-line">
+          <span class="terminal-prompt">></span>
+          <span class="terminal-command"> scoop bucket add agit https://github.com/agit-stuff/agit; scoop install agit</span>
+        </span>
+      </div>
+    </div>
+    <div style="margin-top: 2rem;">
+      <a href="/download/" class="cta-button">All Download Options</a>
+    </div>
+  </section>
+</StarlightPage>

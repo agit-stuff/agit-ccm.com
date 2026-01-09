@@ -1,0 +1,332 @@
+/* AGIT Website - Techy Dark Theme */
+
+:root {
+  /* Colors */
+  --sl-color-accent-low: #2e0a42;
+  --sl-color-accent: #7F10AE;
+  --sl-color-accent-high: #a855f7;
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #e4e4e7;
+  --sl-color-gray-2: #a1a1aa;
+  --sl-color-gray-3: #71717a;
+  --sl-color-gray-4: #3f3f46;
+  --sl-color-gray-5: #27272a;
+  --sl-color-gray-6: #18181b;
+  --sl-color-black: #0a0a0f;
+
+  /* Background */
+  --sl-color-bg: #0a0a0f;
+  --sl-color-bg-nav: #111118;
+  --sl-color-bg-sidebar: #0f0f14;
+
+  /* Typography */
+  --sl-font-system: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --sl-font-system-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+/* Dark mode only */
+:root[data-theme='light'] {
+  --sl-color-bg: #fafafa;
+  --sl-color-bg-nav: #ffffff;
+}
+
+/* Grid pattern background */
+body {
+  background-color: var(--sl-color-bg);
+  background-image:
+    linear-gradient(rgba(127, 16, 174, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(127, 16, 174, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Glow effects on interactive elements */
+a:hover,
+button:hover {
+  text-shadow: 0 0 10px rgba(127, 16, 174, 0.5);
+}
+
+/* Code blocks */
+pre {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 8px;
+  background: var(--sl-color-gray-6) !important;
+}
+
+code {
+  font-family: var(--sl-font-system-mono);
+}
+
+/* Cards and containers */
+.sl-markdown-content {
+  max-width: 80ch;
+}
+
+/* Custom button styles */
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--sl-color-accent), var(--sl-color-accent-high));
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(127, 16, 174, 0.4);
+  text-shadow: none;
+}
+
+.cta-button.secondary {
+  background: transparent;
+  border: 2px solid var(--sl-color-accent);
+  color: var(--sl-color-accent-high);
+}
+
+.cta-button.secondary:hover {
+  background: rgba(127, 16, 174, 0.1);
+}
+
+/* Feature cards */
+.feature-card {
+  padding: 1.5rem;
+  background: var(--sl-color-gray-6);
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.feature-card:hover {
+  border-color: var(--sl-color-accent);
+  box-shadow: 0 0 20px rgba(127, 16, 174, 0.2);
+}
+
+/* Terminal styling */
+.terminal {
+  background: #0d0d12;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: var(--sl-font-system-mono);
+}
+
+.terminal-header {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--sl-color-gray-6);
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminal-dot.red { background: #ff5f56; }
+.terminal-dot.yellow { background: #ffbd2e; }
+.terminal-dot.green { background: #27c93f; }
+
+.terminal-body {
+  padding: 1rem;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.terminal-line {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.terminal-prompt {
+  color: var(--sl-color-accent-high);
+}
+
+.terminal-command {
+  color: var(--sl-color-gray-1);
+}
+
+.terminal-output {
+  color: var(--sl-color-gray-3);
+}
+
+/* Download cards */
+.download-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.download-card {
+  padding: 1.5rem;
+  background: var(--sl-color-gray-6);
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.download-card.active {
+  border-color: var(--sl-color-accent);
+  box-shadow: 0 0 20px rgba(127, 16, 174, 0.3);
+}
+
+.download-card h3 {
+  margin: 0 0 1rem;
+  color: var(--sl-color-white);
+}
+
+.download-card code {
+  display: block;
+  padding: 0.75rem;
+  background: var(--sl-color-black);
+  border-radius: 6px;
+  margin: 1rem 0;
+  font-size: 13px;
+}
+
+/* Sponsor tiers */
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.sponsor-tier {
+  padding: 2rem;
+  background: var(--sl-color-gray-6);
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.sponsor-tier.featured {
+  border-color: var(--sl-color-accent);
+  position: relative;
+}
+
+.sponsor-tier.featured::before {
+  content: 'Popular';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--sl-color-accent);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.sponsor-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--sl-color-accent-high);
+}
+
+/* Animation for terminal cursor */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background: var(--sl-color-accent-high);
+  animation: blink 1s infinite;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+
+/* Hero section */
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-logo {
+  width: 150px;
+  height: auto;
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--sl-color-white), var(--sl-color-accent-high));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-size: 1.25rem;
+  color: var(--sl-color-gray-2);
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--sl-color-gray-1);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Features section */
+.features {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero-tagline {
+    font-size: 1rem;
+  }
+
+  .terminal-body {
+    font-size: 12px;
+  }
+}

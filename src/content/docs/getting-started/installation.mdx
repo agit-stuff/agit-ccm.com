@@ -1,0 +1,135 @@
+---
+title: Installation
+description: Install AGIT on your system
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+AGIT can be installed on macOS, Windows, and Linux. Choose your preferred method below.
+
+## Quick Install
+
+<Tabs>
+  <TabItem label="macOS">
+    ```bash
+    brew tap agit-stuff/agit
+    brew install agit
+    ```
+  </TabItem>
+  <TabItem label="Windows">
+    ```powershell
+    scoop bucket add agit https://github.com/agit-stuff/agit
+    scoop install agit
+    ```
+  </TabItem>
+  <TabItem label="Linux">
+    ```bash
+    curl -fsSL https://raw.githubusercontent.com/agit-stuff/agit/main/install.sh | bash
+    ```
+  </TabItem>
+  <TabItem label="Cargo">
+    ```bash
+    cargo install agit
+    ```
+  </TabItem>
+</Tabs>
+
+## Verify Installation
+
+After installing, verify AGIT is working:
+
+```bash
+agit --version
+```
+
+You should see output like:
+
+```
+agit 0.1.0
+```
+
+## System Requirements
+
+- **Git**: Git must be installed and available in your PATH
+- **Operating System**: macOS 11+, Windows 10+, or Linux (glibc 2.17+)
+- **Disk Space**: ~10MB
+- **Optional**: AI editor with MCP support (Cursor, Claude Code, Windsurf)
+
+## Manual Installation
+
+If you prefer to download the binary manually:
+
+1. Go to the [GitHub Releases page](https://github.com/agit-stuff/agit/releases/latest)
+2. Download the appropriate archive for your system:
+   - `agit-macos-x86_64.tar.gz` - macOS Intel
+   - `agit-macos-aarch64.tar.gz` - macOS Apple Silicon
+   - `agit-linux-x86_64.tar.gz` - Linux x86_64
+   - `agit-linux-aarch64.tar.gz` - Linux ARM64
+   - `agit-windows-x86_64.zip` - Windows x64
+3. Extract the archive
+4. Move the `agit` binary to a directory in your PATH (e.g., `~/.local/bin`)
+5. Make it executable (Unix): `chmod +x agit`
+
+### Verify Checksum
+
+For security, verify the download checksum:
+
+```bash
+# Download checksums
+curl -fsSL https://github.com/agit-stuff/agit/releases/latest/download/checksums.txt
+
+# Verify (Linux/macOS)
+sha256sum -c checksums.txt
+```
+
+## Updating
+
+<Tabs>
+  <TabItem label="Homebrew">
+    ```bash
+    brew update
+    brew upgrade agit
+    ```
+  </TabItem>
+  <TabItem label="Scoop">
+    ```powershell
+    scoop update agit
+    ```
+  </TabItem>
+  <TabItem label="Shell Script">
+    ```bash
+    curl -fsSL https://raw.githubusercontent.com/agit-stuff/agit/main/install.sh | bash
+    ```
+  </TabItem>
+  <TabItem label="Cargo">
+    ```bash
+    cargo install agit --force
+    ```
+  </TabItem>
+</Tabs>
+
+## Uninstalling
+
+<Tabs>
+  <TabItem label="Homebrew">
+    ```bash
+    brew uninstall agit
+    brew untap agit-stuff/agit
+    ```
+  </TabItem>
+  <TabItem label="Scoop">
+    ```powershell
+    scoop uninstall agit
+    scoop bucket rm agit
+    ```
+  </TabItem>
+  <TabItem label="Manual">
+    ```bash
+    rm ~/.local/bin/agit
+    ```
+  </TabItem>
+</Tabs>
+
+## Next Steps
+
+Now that AGIT is installed, [get started with your first project](/getting-started/quick-start/).

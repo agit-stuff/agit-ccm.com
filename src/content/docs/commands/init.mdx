@@ -1,0 +1,84 @@
+---
+title: agit init
+description: Initialize AGIT in a Git repository
+---
+
+Initialize AGIT in the current Git repository.
+
+## Usage
+
+```bash
+agit init
+```
+
+## Description
+
+Creates the AGIT directory structure and generates editor configuration files.
+
+## What Gets Created
+
+```
+your-project/
+├── .agit/              # Neural graph storage
+│   ├── objects/        # Content-addressable store
+│   ├── refs/heads/     # Branch pointers
+│   ├── HEAD            # Current branch reference
+│   └── index           # Staging area
+├── CLAUDE.md           # Claude Code instructions
+├── .cursorrules        # Cursor instructions
+└── .windsurfrules      # Windsurf instructions
+```
+
+## Options
+
+Currently `agit init` has no options. It uses sensible defaults.
+
+## Examples
+
+### Initialize in Current Directory
+
+```bash
+cd your-project
+agit init
+```
+
+Output:
+```
+Initialized AGIT in /path/to/your-project/.agit
+Created: .cursorrules, CLAUDE.md, .windsurfrules
+```
+
+### Initialize in Existing Git Repository
+
+```bash
+cd existing-git-repo
+agit init
+```
+
+AGIT works alongside your existing `.git` directory.
+
+## Requirements
+
+- Must be run inside a Git repository (or subdirectory)
+- Directory must be writable
+
+## Errors
+
+### Not a Git Repository
+
+```
+error: Not a git repository (or any parent up to mount point /)
+```
+
+**Solution**: Initialize Git first with `git init`.
+
+### Already Initialized
+
+If `.agit/` already exists, the command will report it's already initialized.
+
+## Next Steps
+
+After initializing:
+1. [Record your first thought](/commands/record/)
+2. [Check status](/commands/log/)
+3. [Create a commit](/commands/commit/)

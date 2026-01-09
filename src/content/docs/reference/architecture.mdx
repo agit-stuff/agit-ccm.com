@@ -1,0 +1,194 @@
+---
+title: Architecture
+description: Technical architecture of AGIT
+---
+
+This page describes AGIT's internal architecture and design decisions.
+
+## Overview
+
+AGIT creates a "Neural Graph" that runs parallel to Git's commit graph:
+
+```
+Git Graph               Neural Graph
+─────────               ────────────
+commit e8d4f1a    ←───→ neural a3f7b2c
+    │                       │
+commit c2f1a9b    ←───→ neural b5d8e3a
+    │                       │
+commit ...        ←───→ neural ...
+```
+
+## Components
+
+### Storage Layer
+
+```
+.agit/
+├── objects/        # Content-addressable store (SHA-256)
+├── refs/heads/     # Branch pointers
+├── HEAD            # Current branch reference
+└── index           # Staging area (JSONL)
+```
+
+#### Object Store
+
+Objects are stored by their SHA-256 hash:
+
+```
+.agit/objects/
+├── a3/
+│   └── f7b2c...    # First 2 chars = directory
+├── b5/
+│   └── d8e3a...
+```
+
+Content is JSON, stored as-is (not compressed for simplicity).
+
+#### Index (Staging Area)
+
+The index is a JSONL file (one JSON object per line):
+
+```jsonl
+{"role":"user","category":"intent","content":"Fix bug","timestamp":"2024-01-15T10:30:00Z"}
+{"role":"ai","category":"reasoning","content":"Add null check","timestamp":"2024-01-15T10:31:00Z"}
+```
+
+This format is:
+- Append-only during a session
+- Human-readable
+- Easy to parse
+
+### MCP Server
+
+The MCP server implements JSON-RPC 2.0 over stdio:
+
+```
+AI Editor ──── stdin/stdout ──── agit server
+              (JSON-RPC 2.0)
+```
+
+Available tools:
+- `agit_log_step` - Record a thought
+- `agit_get_status` - Get current status
+
+### Synthesizer
+
+The synthesizer creates summaries from staging entries:
+
+```rust
+pub fn synthesize(entries: &[IndexEntry]) -> String {
+    let intent = find_last_intent(entries);
+    let reasoning = find_last_reasoning(entries);
+
+    match (intent, reasoning) {
+        (Some(i), Some(r)) => format!("Intent: {}. Plan: {}.", i, r),
+        (Some(i), None) => format!("Intent: {}.", i),
+        (None, Some(r)) => format!("Plan: {}.", r),
+        (None, None) => "Manual update.".to_string(),
+    }
+}
+```
+
+This is **deterministic** - no LLM calls. The AI editor does the "thinking", AGIT just synthesizes.
+
+### Commit Pipeline
+
+The commit pipeline:
+
+1. Read entries from index
+2. Synthesize summary
+3. Create trace blob (full JSONL)
+4. Create commit object
+5. Update refs
+6. Clear index
+
+```rust
+pub fn execute(&mut self, message: &str, summary: &str) -> Result<CommitResult> {
+    // 1. Read staging
+    let entries = self.index_store.read_all()?;
+
+    // 2. Create trace blob
+    let trace = format_trace(&entries);
+    let trace_hash = self.object_store.write(&trace)?;
+
+    // 3. Create commit
+    let commit = NeuralCommit {
+        message: message.to_string(),
+        summary: summary.to_string(),
+        git_commit: self.git_repo.head_commit_hash()?,
+        parent: self.head_store.read()?,
+        trace_hash,
+        timestamp: Utc::now(),
+    };
+
+    // 4. Write commit object
+    let hash = self.object_store.write(&commit.to_json())?;
+
+    // 5. Update refs
+    self.ref_store.write("main", &hash)?;
+    self.head_store.write(&hash)?;
+
+    // 6. Clear staging
+    self.index_store.clear()?;
+
+    Ok(CommitResult { neural_hash: hash, git_hash: commit.git_commit })
+}
+```
+
+## Design Principles
+
+### 1. Git-Compatible
+
+AGIT works alongside Git, never replacing it:
+- Separate `.agit/` directory
+- Links to git commits, doesn't duplicate
+- Follows git branches automatically
+
+### 2. Deterministic
+
+No LLM calls in AGIT itself:
+- AI editors do the reasoning
+- AGIT just stores and synthesizes
+- Reproducible behavior
+
+### 3. Simple Storage
+
+Content-addressable store with JSON:
+- Easy to debug
+- Human-readable
+- No complex database
+
+### 4. Atomic Operations
+
+File operations are atomic:
+- Write to temp file first
+- Rename to final location
+- Safe concurrent access
+
+## Data Flow
+
+```
+┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+│  AI Editor  │──MCP───▶│ AGIT Server │──write─▶│   .agit/    │
+│  (Cursor)   │         │             │         │   index     │
+└─────────────┘         └─────────────┘         └─────────────┘
+                                                       │
+                                                       ▼
+┌─────────────┐         ┌─────────────┐         ┌─────────────┐
+│    User     │──CLI───▶│agit commit  │──read──▶│   .agit/    │
+│             │         │             │         │   objects   │
+└─────────────┘         └─────────────┘         └─────────────┘
+```
+
+## Security
+
+- No shell command execution with user input
+- Input validation on all parameters
+- File locking for concurrent access
+- Atomic writes prevent corruption
+
+## See Also
+
+- [Philosophy](/reference/philosophy/) - Why AGIT exists
+- [MCP Integration](/guides/mcp-integration/) - Protocol details

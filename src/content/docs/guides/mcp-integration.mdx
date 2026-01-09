@@ -1,0 +1,144 @@
+---
+title: MCP Integration
+description: How AGIT uses the Model Context Protocol
+---
+
+AGIT uses the **Model Context Protocol (MCP)** to receive thoughts from AI editors. This page explains how it works.
+
+## What is MCP?
+
+MCP (Model Context Protocol) is a standard protocol for AI tools to communicate with external services. It allows AI assistants to:
+
+- Call external tools and functions
+- Access external data sources
+- Integrate with local services
+
+## The "Seamless Echo" Strategy
+
+Traditional AI tools call LLMs from CLI tools. AGIT inverts this:
+
+```
+Traditional: CLI → LLM
+AGIT:        AI Editor → AGIT (via MCP)
+```
+
+Your AI editor **pushes** context to AGIT, rather than AGIT pulling from an LLM.
+
+## How It Works
+
+```
+┌─────────────────────────────────────────┐
+│          AI Editor (Cursor/Claude)       │
+│  ┌───────────────────────────────────┐  │
+│  │  User: "Fix the auth bug"         │  │
+│  │  AI: [Logs intent via MCP]        │  │
+│  │  AI: "I'll add a try/catch"       │  │
+│  │  AI: [Logs reasoning via MCP]     │  │
+│  └───────────────────────────────────┘  │
+└─────────────────┬───────────────────────┘
+                  │ MCP (JSON-RPC)
+                  ▼
+┌─────────────────────────────────────────┐
+│            AGIT MCP Server              │
+│  - Receives: role, category, content    │
+│  - Appends to: .agit/index              │
+└─────────────────────────────────────────┘
+```
+
+## MCP Tools
+
+AGIT exposes these MCP tools:
+
+### `agit_log_step`
+
+Log a thought to the staging area.
+
+**Parameters:**
+| Name | Type | Description |
+|------|------|-------------|
+| `role` | string | `"user"` or `"ai"` |
+| `category` | string | `"intent"`, `"reasoning"`, etc. |
+| `content` | string | The thought content |
+
+**Example:**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "agit_log_step",
+    "arguments": {
+      "role": "user",
+      "category": "intent",
+      "content": "Fix authentication bug in login flow"
+    }
+  }
+}
+```
+
+### `agit_get_status`
+
+Get the current AGIT status.
+
+**Returns:**
+- Staging area entry count
+- Recent entries
+- Current branch
+
+## Starting the MCP Server
+
+The MCP server starts automatically when your AI editor connects. For manual control:
+
+```bash
+# Start the server
+agit server
+
+# The server communicates over stdio (JSON-RPC)
+```
+
+## Editor Configuration
+
+Each AI editor has its own way to configure MCP servers:
+
+### Cursor
+
+Add to your MCP settings:
+```json
+{
+  "servers": {
+    "agit": {
+      "command": "agit",
+      "args": ["server"]
+    }
+  }
+}
+```
+
+### Claude Code
+
+Claude Code automatically detects AGIT when `CLAUDE.md` exists in the project root.
+
+## Debugging MCP
+
+Enable debug logging to see MCP traffic:
+
+```bash
+RUST_LOG=debug agit server
+```
+
+This shows:
+- Incoming JSON-RPC requests
+- Tool invocations
+- Response data
+
+## Security
+
+The MCP server:
+- Only accepts local connections
+- Does not execute arbitrary commands
+- Validates all input data
+- Uses atomic file writes
+
+## Next Steps
+
+- [Set up Cursor](/guides/cursor-setup/)
+- [Set up Claude Code](/guides/claude-code-setup/)

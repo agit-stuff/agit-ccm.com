@@ -1,0 +1,165 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+---
+
+<StarlightPage frontmatter={{ title: 'Download AGIT' }}>
+  <div style="max-width: 900px; margin: 0 auto;">
+    <p style="text-align: center; color: var(--sl-color-gray-2); margin-bottom: 2rem;">
+      Choose your preferred installation method. All methods install the same <code>agit</code> binary.
+    </p>
+
+    <div class="download-grid">
+      <div class="download-card" data-os="macos">
+        <h3>🍎 macOS</h3>
+        <p style="color: var(--sl-color-gray-3);">Homebrew (Intel & Apple Silicon)</p>
+        <code>brew tap agit-stuff/agit<br/>brew install agit</code>
+        <button class="cta-button" style="width: 100%; justify-content: center;" onclick="copyToClipboard('brew tap agit-stuff/agit && brew install agit')">
+          Copy Command
+        </button>
+      </div>
+
+      <div class="download-card" data-os="windows">
+        <h3>🪟 Windows</h3>
+        <p style="color: var(--sl-color-gray-3);">Scoop Package Manager</p>
+        <code>scoop bucket add agit https://github.com/agit-stuff/agit<br/>scoop install agit</code>
+        <button class="cta-button" style="width: 100%; justify-content: center;" onclick="copyToClipboard('scoop bucket add agit https://github.com/agit-stuff/agit; scoop install agit')">
+          Copy Command
+        </button>
+      </div>
+
+      <div class="download-card" data-os="linux">
+        <h3>🐧 Linux</h3>
+        <p style="color: var(--sl-color-gray-3);">Shell Script (x86_64 & ARM64)</p>
+        <code>curl -fsSL https://raw.githubusercontent.com/agit-stuff/agit/main/install.sh | bash</code>
+        <button class="cta-button" style="width: 100%; justify-content: center;" onclick="copyToClipboard('curl -fsSL https://raw.githubusercontent.com/agit-stuff/agit/main/install.sh | bash')">
+          Copy Command
+        </button>
+      </div>
+
+      <div class="download-card">
+        <h3>📦 From Source</h3>
+        <p style="color: var(--sl-color-gray-3);">Cargo (Rust 1.75+)</p>
+        <code>cargo install agit</code>
+        <button class="cta-button" style="width: 100%; justify-content: center;" onclick="copyToClipboard('cargo install agit')">
+          Copy Command
+        </button>
+      </div>
+    </div>
+
+    <div style="margin-top: 3rem;">
+      <h2>Manual Download</h2>
+      <p style="color: var(--sl-color-gray-2);">
+        Download pre-built binaries directly from GitHub Releases:
+      </p>
+
+      <div class="feature-card" style="margin-top: 1rem;">
+        <h3>Latest Release</h3>
+        <p id="version-badge" style="color: var(--sl-color-gray-3);">Loading version...</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          <a href="https://github.com/agit-stuff/agit/releases/latest/download/agit-macos-x86_64.tar.gz" class="cta-button secondary" style="justify-content: center;">
+            macOS Intel
+          </a>
+          <a href="https://github.com/agit-stuff/agit/releases/latest/download/agit-macos-aarch64.tar.gz" class="cta-button secondary" style="justify-content: center;">
+            macOS ARM
+          </a>
+          <a href="https://github.com/agit-stuff/agit/releases/latest/download/agit-linux-x86_64.tar.gz" class="cta-button secondary" style="justify-content: center;">
+            Linux x86_64
+          </a>
+          <a href="https://github.com/agit-stuff/agit/releases/latest/download/agit-linux-aarch64.tar.gz" class="cta-button secondary" style="justify-content: center;">
+            Linux ARM64
+          </a>
+          <a href="https://github.com/agit-stuff/agit/releases/latest/download/agit-windows-x86_64.zip" class="cta-button secondary" style="justify-content: center;">
+            Windows x64
+          </a>
+          <a href="https://github.com/agit-stuff/agit/releases/latest/download/checksums.txt" class="cta-button secondary" style="justify-content: center;">
+            Checksums
+          </a>
+        </div>
+
+        <p style="margin-top: 1.5rem;">
+          <a href="https://github.com/agit-stuff/agit/releases" style="color: var(--sl-color-accent-high);">
+            View all releases →
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <div style="margin-top: 3rem;">
+      <h2>System Requirements</h2>
+      <div class="feature-card">
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="margin-bottom: 0.5rem;">✅ Git installed and in PATH</li>
+          <li style="margin-bottom: 0.5rem;">✅ macOS 11+, Windows 10+, or Linux (glibc 2.17+)</li>
+          <li style="margin-bottom: 0.5rem;">✅ ~10MB disk space</li>
+          <li>✅ (Optional) AI editor with MCP support for automatic logging</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top: 3rem;">
+      <h2>Verify Installation</h2>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot red"></span>
+          <span class="terminal-dot yellow"></span>
+          <span class="terminal-dot green"></span>
+        </div>
+        <div class="terminal-body">
+          <span class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command"> agit --version</span>
+          </span>
+          <span class="terminal-line terminal-output">agit 0.1.0</span>
+          <span class="terminal-line">&nbsp;</span>
+          <span class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command"> agit --help</span>
+          </span>
+          <span class="terminal-line terminal-output">AI-native Git wrapper for capturing context alongside code</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    // Detect OS and highlight relevant card
+    function detectOS() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      if (userAgent.includes('win')) return 'windows';
+      if (userAgent.includes('mac')) return 'macos';
+      if (userAgent.includes('linux')) return 'linux';
+      return null;
+    }
+
+    function highlightOS() {
+      const os = detectOS();
+      if (os) {
+        const card = document.querySelector(`[data-os="${os}"]`);
+        if (card) {
+          card.classList.add('active');
+        }
+      }
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Copied to clipboard!');
+      });
+    }
+
+    // Fetch latest version from GitHub
+    async function fetchVersion() {
+      try {
+        const response = await fetch('https://api.github.com/repos/agit-stuff/agit/releases/latest');
+        const data = await response.json();
+        document.getElementById('version-badge').textContent = `Version ${data.tag_name}`;
+      } catch (e) {
+        document.getElementById('version-badge').textContent = 'Check GitHub for latest version';
+      }
+    }
+
+    highlightOS();
+    fetchVersion();
+  </script>
+</StarlightPage>
