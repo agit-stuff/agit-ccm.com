@@ -8,7 +8,7 @@ export default defineConfig({
     starlight({
       title: 'AGIT',
       logo: {
-        src: './public/agit-logo.svg',
+        src: './src/assets/agit-logo.svg',
         replacesTitle: true,
       },
       social: {

@@ -22,9 +22,9 @@ import LanguageSelect from '@astrojs/starlight/components/LanguageSelect.astro';
   </div>
   <div class="sl-hidden md:sl-flex print:hidden right-group">
     <nav class="header-nav">
-      <a href="/getting-started/quick-start/">Docs</a>
-      <a href="/getting-started/installation/">Install</a>
-      <a href="/sponsor/">Sponsor</a>
+      <a href={`${import.meta.env.BASE_URL}getting-started/quick-start/`}>Docs</a>
+      <a href={`${import.meta.env.BASE_URL}getting-started/installation/`}>Install</a>
+      <a href={`${import.meta.env.BASE_URL}sponsor/`}>Sponsor</a>
     </nav>
     <div class="sl-flex social-icons">
       <SocialIcons {...Astro.props} />
