@@ -94,7 +94,7 @@ code {
   color: var(--sl-color-accent-high) !important;
 }
 
-/* Feature cards - fixed size, centered content */
+/* Feature cards - fixed size, top-aligned content */
 .feature-card {
   padding: 1.5rem 2rem;
   background: var(--sl-color-gray-6);
@@ -104,7 +104,7 @@ code {
   height: 180px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: center;
   overflow: hidden;
