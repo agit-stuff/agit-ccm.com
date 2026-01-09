@@ -1,6 +1,6 @@
-# AGIT Documentation Website
+# agit Documentation Website
 
-Official documentation site for [AGIT](https://github.com/agit-stuff/agit), the AI-native Git wrapper.
+Official documentation site for [agit](https://github.com/agit-stuff/agit), the AI-native Git wrapper.
 
 **Live site: https://agit-stuff.github.io/**
 
