@@ -407,6 +407,16 @@ main {
   line-height: 1.8;
 }
 
+.steps-list code {
+  text-align: left;
+  display: inline;
+}
+
+/* How it works section - left align content */
+.how-it-works .feature-card {
+  text-align: left;
+}
+
 /* CTA wrapper */
 .cta-wrapper {
   margin-top: 2rem;
