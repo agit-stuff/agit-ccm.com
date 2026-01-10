@@ -21,12 +21,23 @@ commit ...        ←───→ neural ...
 
 ## Components
 
-### Storage Layer
+### Storage Layer (V2 Git-Native)
 
+AGIT uses a hybrid storage approach that leverages Git infrastructure:
+
+**Git-managed (shared via push/pull):**
+```
+.git/
+├── refs/agit/       # Custom ref namespace for neural commits
+│   └── heads/       # Neural branch pointers
+│       ├── main     # Points to latest neural commit on main
+│       └── feature  # Points to latest neural commit on feature
+└── objects/         # Neural commit objects stored in Git ODB
+```
+
+**Local state (not shared):**
 ```
 .agit/
-├── objects/         # Content-addressable store (SHA-256)
-├── refs/heads/      # Branch pointers
 ├── HEAD             # Current branch reference
 ├── index            # Staging area (JSONL)
 ├── staged-index     # Frozen staging (before commit)
@@ -36,19 +47,27 @@ commit ...        ←───→ neural ...
 └── search_index/    # Full-text search index (Tantivy)
 ```
 
+#### Custom Git Refs
+
+Neural commit refs are stored under `.git/refs/agit/heads/` using Git native ref system. This enables:
+
+- **Push/Pull support**: Refs sync automatically with `git push` and `git fetch`
+- **Branch tracking**: Each Git branch has a corresponding neural branch  
+- **Team collaboration**: Neural history is shared like regular Git refs
+
 #### Object Store
 
-Objects are stored by their SHA-256 hash:
+Neural commit objects are stored in Git object database:
 
 ```
-.agit/objects/
+.git/objects/
 ├── a3/
-│   └── f7b2c...    # First 2 chars = directory
+│   └── f7b2c...    # Neural commit object
 ├── b5/
-│   └── d8e3a...
+│   └── d8e3a...    # Trace blob
 ```
 
-Content is JSON, stored as-is (not compressed for simplicity).
+Content is JSON, stored using Git content-addressable system.
 
 #### Index (Staging Area)
 
@@ -225,12 +244,13 @@ During merge or rebase, AGIT enters read-only mode:
 
 ## Design Principles
 
-### 1. Git-Compatible
+### 1. Git-Native
 
-AGIT works alongside Git, never replacing it:
-- Separate `.agit/` directory
-- Links to git commits, doesn't duplicate
-- Follows git branches automatically
+AGIT integrates deeply with Git:
+- Uses `.git/refs/agit/*` for branch refs
+- Stores objects in Git object database
+- Syncs via standard `git push`/`git pull`
+- Local state in `.agit/` (not synced)
 
 ### 2. Deterministic
 
@@ -263,8 +283,8 @@ File operations are atomic:
                                                        │
                                                        ▼
 ┌─────────────┐         ┌─────────────┐         ┌─────────────┐
-│    User     │──CLI───▶│agit commit  │──read──▶│   .agit/    │
-│             │         │             │         │   objects   │
+│    User     │──CLI───▶│agit commit  │──read──▶│ .git/refs/  │
+│             │         │             │         │ agit/heads/ │
 └─────────────┘         └─────────────┘         └─────────────┘
 ```
 
