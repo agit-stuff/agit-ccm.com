@@ -51,29 +51,87 @@ AGIT exposes these MCP tools:
 
 ### `agit_log_step`
 
-Log a thought to the staging area.
+Log thoughts to the staging area. Supports batch mode for efficient logging.
 
 **Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `role` | string | `"user"` or `"ai"` |
-| `category` | string | `"intent"`, `"reasoning"`, `"error"` |
-| `content` | string | The thought content |
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `batch` | array | Yes* | Array of log entries (preferred) |
+| `repo_path` | string | No | Target repository path for cross-repo validation |
+| `role` | string | No* | `"user"` or `"ai"` (deprecated, use batch) |
+| `category` | string | No* | `"intent"`, `"reasoning"`, `"error"` (deprecated, use batch) |
+| `content` | string | No* | The thought content (deprecated, use batch) |
 
-**Example:**
+*Use `batch` array for new integrations. Single-entry mode is deprecated.
+
+**Batch Entry Format:**
+```json
+{
+  "role": "user" | "ai",
+  "category": "intent" | "reasoning" | "error",
+  "content": "The thought content",
+  "locations": [
+    {
+      "file": "src/auth.rs",
+      "start_line": 42,
+      "end_line": 65
+    }
+  ]
+}
+```
+
+**Example (Batch Mode):**
 ```json
 {
   "method": "tools/call",
   "params": {
     "name": "agit_log_step",
     "arguments": {
-      "role": "user",
-      "category": "intent",
-      "content": "Fix authentication bug in login flow"
+      "batch": [
+        {
+          "role": "user",
+          "category": "intent",
+          "content": "Fix authentication bug in login flow"
+        },
+        {
+          "role": "ai",
+          "category": "reasoning",
+          "content": "Added try/catch around token validation",
+          "locations": [
+            { "file": "src/auth.rs", "start_line": 42, "end_line": 65 }
+          ]
+        }
+      ]
     }
   }
 }
 ```
+
+**Cross-Repo Validation:**
+
+When working across multiple repositories, use `repo_path` to ensure entries are logged to the correct repo:
+
+```json
+{
+  "name": "agit_log_step",
+  "arguments": {
+    "repo_path": "/path/to/target/repo",
+    "batch": [...]
+  }
+}
+```
+
+If `repo_path` doesn't match the current repository, the entire batch is rejected:
+```
+Repository mismatch: entries target '/path/to/repo' but current repo is '/other/repo'.
+Use `cd` to switch to the target repository, or omit repo_path to log to current repo.
+```
+
+**Location Validation:**
+
+- Locations must reference files that exist in the repository
+- If an entry has locations but ALL are invalid, the entire entry is rejected
+- Entries without locations are always accepted (general context)
 
 ### `agit_get_status`
 

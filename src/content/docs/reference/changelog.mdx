@@ -3,6 +3,34 @@ title: Changelog
 description: Release history and version notes
 ---
 
+## v1.3.0
+
+**Init Command Improvements**
+
+- `agit init --update` now shows "Already up to date." when protocol version matches
+- Added restart warning after init/update changes: "Restart your AI assistant to apply the updated AGIT memory protocol."
+- Improved version detection for protocol updates
+
+**MCP Tool Enhancements**
+
+`agit_log_step` improvements:
+- New `repo_path` parameter for cross-repo awareness - validates target repo matches current repo
+- Entries with all-invalid locations are now rejected entirely (not just locations stripped)
+- Improved error messages distinguishing rejected entries vs skipped locations
+
+Example with `repo_path`:
+```json
+{
+  "name": "agit_log_step",
+  "arguments": {
+    "repo_path": "/path/to/repo",
+    "batch": [...]
+  }
+}
+```
+
+---
+
 ## v1.1.1
 
 **File Location Tracking**

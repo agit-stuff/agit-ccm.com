@@ -15,6 +15,14 @@ This guide shows you how to set up Claude Code to automatically log thoughts to 
 
 When you run `agit init`, a `CLAUDE.md` file is created automatically. Claude Code reads this file and follows its instructions.
 
+:::caution[Restart Required]
+After running `agit init` or `agit init --update`, **restart your Claude Code session** to load the updated AGIT configuration. The CLI will remind you:
+
+```
+Restart your AI assistant to activate AGIT memory.
+```
+:::
+
 ## How It Works
 
 1. **Claude Code reads `CLAUDE.md`** when starting a session
@@ -128,7 +136,8 @@ agit commit -m "Add rate limiting middleware"
 
 1. Verify `CLAUDE.md` exists in project root
 2. Check AGIT is initialized: `ls .agit`
-3. Restart Claude Code session
+3. **Restart Claude Code session** - this is required after init or update
+4. If you updated AGIT, run `agit init --update` then restart again
 
 ### MCP Not Connecting
 

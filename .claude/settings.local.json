@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(agit log-step:*)",
+      "mcp__agit__agit_get_file_history",
+      "mcp__agit__agit_log_step",
+      "Bash(git log:*)",
+      "Bash(cargo build:*)",
+      "Bash(cargo test:*)"
+    ]
+  }
+}

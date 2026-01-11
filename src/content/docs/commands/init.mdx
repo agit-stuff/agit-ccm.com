@@ -31,7 +31,13 @@ your-project/
 
 ## Options
 
-Currently `agit init` has no options. It uses sensible defaults.
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--update` | `-u` | Update existing template files to latest protocol version |
+| `--force` | `-f` | Force reinitialization even if already initialized |
+| `--no-templates` | | Skip generating template files |
+| `--no-gitignore` | | Skip updating .gitignore |
+| `--no-hooks` | | Skip installing git hooks |
 
 ## Examples
 
@@ -44,8 +50,17 @@ agit init
 
 Output:
 ```
-Initialized AGIT in /path/to/your-project/.agit
-Created: .cursorrules, CLAUDE.md, .windsurfrules
+Initialized AGIT repository in /path/to/your-project/.agit
+
+Generated instruction files:
+  - CLAUDE.md
+  - .cursorrules
+
+Installed git hooks: post-commit, post-checkout, post-merge, post-rewrite
+
+AGIT is ready! MCP configs auto-detected by Cursor and Claude Code.
+Git hooks will keep agit in sync when you use native git commands.
+Restart your AI assistant to activate AGIT memory.
 ```
 
 ### Initialize in Existing Git Repository
@@ -74,7 +89,28 @@ error: Not a git repository (or any parent up to mount point /)
 
 ### Already Initialized
 
-If `.agit/` already exists, the command will report it's already initialized.
+If `.agit/` already exists, the command will report it's already initialized. Use `--force` to reinitialize.
+
+### Updating Protocol Version
+
+To update template files to the latest protocol version:
+
+```bash
+agit init --update
+```
+
+Output when updated:
+```
+✅ Updated AI Protocols in CLAUDE.md to v1.3.0
+✅ Updated AI Protocols in .cursorrules to v1.3.0
+
+Restart your AI assistant to apply the updated AGIT memory protocol.
+```
+
+Output when already up to date:
+```
+Already up to date.
+```
 
 ## Next Steps
 
