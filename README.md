@@ -2,7 +2,7 @@
 
 Official documentation site for [AGIT](https://github.com/agit-stuff/agit), the AI-native Git wrapper.
 
-**Live site: https://agit-stuff.github.io/**
+**Live site: https://www.agit-ccm.com/**
 
 ## Development
 
