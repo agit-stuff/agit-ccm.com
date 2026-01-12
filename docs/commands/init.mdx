@@ -1,0 +1,121 @@
+---
+title: agit init
+description: Initialize AGIT in a Git repository
+sidebar_position: 1
+---
+
+Initialize AGIT in the current Git repository.
+
+## Usage
+
+```bash
+agit init
+```
+
+## Description
+
+Creates the AGIT directory structure and generates editor configuration files.
+
+## What Gets Created
+
+```
+your-project/
+├── .agit/              # Neural graph storage
+│   ├── objects/        # Content-addressable store
+│   ├── refs/heads/     # Branch pointers
+│   ├── HEAD            # Current branch reference
+│   └── index           # Staging area
+├── CLAUDE.md           # Claude Code instructions
+├── .cursorrules        # Cursor instructions
+└── .windsurfrules      # Windsurf instructions
+```
+
+## Options
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--update` | `-u` | Update existing template files to latest protocol version |
+| `--force` | `-f` | Force reinitialization even if already initialized |
+| `--no-templates` | | Skip generating template files |
+| `--no-gitignore` | | Skip updating .gitignore |
+| `--no-hooks` | | Skip installing git hooks |
+
+## Examples
+
+### Initialize in Current Directory
+
+```bash
+cd your-project
+agit init
+```
+
+Output:
+```
+Initialized AGIT repository in /path/to/your-project/.agit
+
+Generated instruction files:
+  - CLAUDE.md
+  - .cursorrules
+
+Installed git hooks: post-commit, post-checkout, post-merge, post-rewrite
+
+AGIT is ready! MCP configs auto-detected by Cursor and Claude Code.
+Git hooks will keep agit in sync when you use native git commands.
+Restart your AI assistant to activate AGIT memory.
+```
+
+### Initialize in Existing Git Repository
+
+```bash
+cd existing-git-repo
+agit init
+```
+
+AGIT works alongside your existing `.git` directory.
+
+## Requirements
+
+- Must be run inside a Git repository (or subdirectory)
+- Directory must be writable
+
+## Errors
+
+### Not a Git Repository
+
+```
+error: Not a git repository (or any parent up to mount point /)
+```
+
+**Solution**: Initialize Git first with `git init`.
+
+### Already Initialized
+
+If `.agit/` already exists, the command will report it's already initialized. Use `--force` to reinitialize.
+
+### Updating Protocol Version
+
+To update template files to the latest protocol version:
+
+```bash
+agit init --update
+```
+
+Output when updated:
+```
+✅ Updated AI Protocols in CLAUDE.md to v1.3.0
+✅ Updated AI Protocols in .cursorrules to v1.3.0
+
+Restart your AI assistant to apply the updated AGIT memory protocol.
+```
+
+Output when already up to date:
+```
+Already up to date.
+```
+
+## Next Steps
+
+After initializing:
+1. [Record your first thought](/docs/commands/record)
+2. [Check status](/docs/commands/log)
+3. [Create a commit](/docs/commands/commit)

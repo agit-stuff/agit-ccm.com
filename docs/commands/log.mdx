@@ -1,0 +1,83 @@
+---
+title: agit log
+description: View neural commit history
+sidebar_position: 6
+---
+
+Display the neural commit history with summaries.
+
+## Usage
+
+```bash
+agit log
+agit log -n <count>
+```
+
+## Description
+
+Shows the neural commit history, displaying:
+- Neural commit hash
+- Linked git commit
+- Timestamp
+- Commit message
+- Synthesized summary
+
+## Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `-n`, `--count` | 10 | Number of commits to show |
+
+## Examples
+
+### View Recent History
+
+```bash
+agit log
+```
+
+Output:
+```
+commit a3f7b2c (HEAD -> main)
+Git:    e8d4f1a
+Date:   2024-01-15 10:45:32
+
+    Add user authentication
+
+    Summary: Intent: Implement JWT auth. Plan: Add middleware with refresh tokens.
+
+commit b5d8e3a
+Git:    c2f1a9b
+Date:   2024-01-14 16:22:10
+
+    Fix login validation
+
+    Summary: Intent: Fix validation bug. Plan: Add null check before parsing.
+```
+
+### Limit Output
+
+```bash
+agit log -n 5
+```
+
+Shows only the 5 most recent commits.
+
+## Output Format
+
+Each entry shows:
+
+```
+commit <neural-hash> (<branch>)
+Git:    <linked-git-hash>
+Date:   <timestamp>
+
+    <commit message>
+
+    Summary: <synthesized summary>
+```
+
+## See Also
+
+- [agit show](/docs/commands/show) - View full details for a specific commit
+- [agit commit](/docs/commands/commit) - Create new commits

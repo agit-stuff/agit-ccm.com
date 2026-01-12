@@ -1,0 +1,94 @@
+---
+title: agit record
+description: Record a thought to the staging area
+sidebar_position: 2
+---
+
+Manually record a thought to AGIT's staging area.
+
+## Usage
+
+```bash
+agit record <message>
+agit record --role <role> --category <category> <message>
+```
+
+## Description
+
+Adds a thought entry to the staging area (`.agit/index`). These entries are included in the next neural commit.
+
+## Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `message` | The thought content to record |
+
+## Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `--role`, `-r` | `user` | Role: `user` or `ai` |
+| `--category`, `-c` | `intent` | Category: `intent`, `reasoning`, etc. |
+
+## Examples
+
+### Record User Intent
+
+```bash
+agit record "Add dark mode to settings page"
+```
+
+This records with default role=user, category=intent.
+
+### Record with Specific Role/Category
+
+```bash
+agit record --role ai --category reasoning "Will use CSS variables for theme switching"
+```
+
+### Record AI Decision
+
+```bash
+agit record -r ai -c decision "Using localStorage for theme persistence"
+```
+
+## Categories
+
+Common categories:
+
+| Category | Description | Typical Role |
+|----------|-------------|--------------|
+| `intent` | What the user wants | user |
+| `reasoning` | How to approach it | ai |
+| `decision` | Technical choice made | ai |
+| `observation` | Something noticed | ai |
+
+You can use custom categories - they're just strings.
+
+## Output
+
+```bash
+$ agit record "Implement user search feature"
+Recorded thought to staging area
+```
+
+## Storage Format
+
+Entries are stored as JSONL in `.agit/index`:
+
+```json
+{"role":"user","category":"intent","content":"Implement user search","timestamp":"2024-01-15T10:30:00Z"}
+```
+
+## When to Use
+
+- **Manual workflow**: When not using an AI editor with MCP
+- **Adding context**: When the AI didn't capture something important
+- **Quick notes**: For developer thoughts during implementation
+
+For AI editors with MCP (Cursor, Claude Code), recording happens automatically.
+
+## See Also
+
+- [agit status](/docs/commands/status) - View recorded thoughts
+- [agit commit](/docs/commands/commit) - Create a commit with thoughts

@@ -1,0 +1,296 @@
+---
+title: MCP Integration
+description: How AGIT uses the Model Context Protocol
+sidebar_position: 1
+---
+
+AGIT uses the **Model Context Protocol (MCP)** to receive thoughts from AI editors. This page explains how it works.
+
+## What is MCP?
+
+MCP (Model Context Protocol) is a standard protocol for AI tools to communicate with external services. It allows AI assistants to:
+
+- Call external tools and functions
+- Access external data sources
+- Integrate with local services
+
+## The "Seamless Echo" Strategy
+
+Traditional AI tools call LLMs from CLI tools. AGIT inverts this:
+
+```
+Traditional: CLI → LLM
+AGIT:        AI Editor → AGIT (via MCP)
+```
+
+Your AI editor **pushes** context to AGIT, rather than AGIT pulling from an LLM.
+
+## How It Works
+
+```
+┌─────────────────────────────────────────┐
+│          AI Editor (Cursor/Claude)       │
+│  ┌───────────────────────────────────┐  │
+│  │  User: "Fix the auth bug"         │  │
+│  │  AI: [Logs intent via MCP]        │  │
+│  │  AI: "I'll add a try/catch"       │  │
+│  │  AI: [Logs reasoning via MCP]     │  │
+│  └───────────────────────────────────┘  │
+└─────────────────┬───────────────────────┘
+                  │ MCP (JSON-RPC)
+                  ▼
+┌─────────────────────────────────────────┐
+│            AGIT MCP Server              │
+│  - Receives: role, category, content    │
+│  - Appends to: .agit/index              │
+└─────────────────────────────────────────┘
+```
+
+## MCP Tools
+
+AGIT exposes these MCP tools:
+
+### `agit_log_step`
+
+Log thoughts to the staging area. Supports batch mode for efficient logging.
+
+**Parameters:**
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `batch` | array | Yes* | Array of log entries (preferred) |
+| `repo_path` | string | No | Target repository path for cross-repo validation |
+| `role` | string | No* | `"user"` or `"ai"` (deprecated, use batch) |
+| `category` | string | No* | `"intent"`, `"reasoning"`, `"error"` (deprecated, use batch) |
+| `content` | string | No* | The thought content (deprecated, use batch) |
+
+*Use `batch` array for new integrations. Single-entry mode is deprecated.
+
+**Batch Entry Format:**
+```json
+{
+  "role": "user" | "ai",
+  "category": "intent" | "reasoning" | "error",
+  "content": "The thought content",
+  "locations": [
+    {
+      "file": "src/auth.rs",
+      "start_line": 42,
+      "end_line": 65
+    }
+  ]
+}
+```
+
+**Example (Batch Mode):**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "agit_log_step",
+    "arguments": {
+      "batch": [
+        {
+          "role": "user",
+          "category": "intent",
+          "content": "Fix authentication bug in login flow"
+        },
+        {
+          "role": "ai",
+          "category": "reasoning",
+          "content": "Added try/catch around token validation",
+          "locations": [
+            { "file": "src/auth.rs", "start_line": 42, "end_line": 65 }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+**Cross-Repo Validation:**
+
+When working across multiple repositories, use `repo_path` to ensure entries are logged to the correct repo:
+
+```json
+{
+  "name": "agit_log_step",
+  "arguments": {
+    "repo_path": "/path/to/target/repo",
+    "batch": [...]
+  }
+}
+```
+
+If `repo_path` doesn't match the current repository, the entire batch is rejected:
+```
+Repository mismatch: entries target '/path/to/repo' but current repo is '/other/repo'.
+Use `cd` to switch to the target repository, or omit repo_path to log to current repo.
+```
+
+**Location Validation:**
+
+- Locations must reference files that exist in the repository
+- If an entry has locations but ALL are invalid, the entire entry is rejected
+- Entries without locations are always accepted (general context)
+
+### `agit_get_status`
+
+Get the current AGIT status.
+
+**Returns:**
+- Staging area entry count
+- Recent entries
+- Current branch
+
+### `agit_get_file_history`
+
+Get neural commit history for a specific file. Useful for understanding past decisions about a file before modifying it.
+
+**Parameters:**
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `filepath` | string | required | Path to the file (e.g., `src/auth.rs`) |
+| `limit` | number | 3 | Maximum number of commits to return |
+
+**Example:**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "agit_get_file_history",
+    "arguments": {
+      "filepath": "src/auth.rs",
+      "limit": 5
+    }
+  }
+}
+```
+
+**Returns:**
+```
+File history for 'src/auth.rs':
+
+1. [abc1234] Fixed authentication bug
+2. [def5678] Updated error handling
+3. [ghi9012] Refactored main function
+```
+
+### `agit_get_relevant_context`
+
+Search past reasoning for relevant context.
+
+**Parameters:**
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `query` | string | required | Search query |
+| `limit` | number | 5 | Maximum results |
+
+**Example:**
+```json
+{
+  "method": "tools/call",
+  "params": {
+    "name": "agit_get_relevant_context",
+    "arguments": {
+      "query": "authentication",
+      "limit": 3
+    }
+  }
+}
+```
+
+### `agit_read_roadmap`
+
+Read project goals and roadmap from AGIT metadata.
+
+### `agit_get_recent_summaries`
+
+Get recent commit summaries to understand recent changes.
+
+**Parameters:**
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `count` | number | 5 | Number of recent summaries |
+
+## Auto-Context Injection
+
+Configure your AI to automatically retrieve file history before modifying files. Add this to your `CLAUDE.md`:
+
+```markdown
+<system_protocol>
+  <critical_rule id="CONTEXT_INJECTION">
+    <status>BLOCKING</status>
+    <trigger>FILE_MODIFICATION</trigger>
+    <instruction>
+      BEFORE writing to any non-empty file, you MUST call:
+      agit_get_file_history(filepath=...)
+
+      Review the returned history to ensure your changes
+      do not regress previous decisions.
+    </instruction>
+  </critical_rule>
+</system_protocol>
+```
+
+This ensures your AI understands the reasoning behind existing code before changing it.
+
+## Starting the MCP Server
+
+The MCP server starts automatically when your AI editor connects. For manual control:
+
+```bash
+# Start the server
+agit server
+
+# The server communicates over stdio (JSON-RPC)
+```
+
+## Editor Configuration
+
+Each AI editor has its own way to configure MCP servers:
+
+### Cursor
+
+Add to your MCP settings:
+```json
+{
+  "servers": {
+    "agit": {
+      "command": "agit",
+      "args": ["server"]
+    }
+  }
+}
+```
+
+### Claude Code
+
+Claude Code automatically detects AGIT when `CLAUDE.md` exists in the project root.
+
+## Debugging MCP
+
+Enable debug logging to see MCP traffic:
+
+```bash
+RUST_LOG=debug agit server
+```
+
+This shows:
+- Incoming JSON-RPC requests
+- Tool invocations
+- Response data
+
+## Security
+
+The MCP server:
+- Only accepts local connections
+- Does not execute arbitrary commands
+- Validates all input data
+- Uses atomic file writes
+
+## Next Steps
+
+- [Set up Cursor](/docs/guides/cursor-setup)
+- [Set up Claude Code](/docs/guides/claude-code-setup)
+- [Search past reasoning](/docs/commands/search)

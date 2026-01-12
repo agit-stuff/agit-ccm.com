@@ -1,0 +1,118 @@
+---
+title: agit show
+description: Show full details of a neural commit
+sidebar_position: 7
+---
+
+Display the complete details of a neural commit, including the full reasoning trace.
+
+## Usage
+
+```bash
+agit show [hash]
+agit show HEAD
+```
+
+## Description
+
+Shows the complete neural commit including:
+- Commit metadata
+- Message and summary
+- Linked git commit
+- Full reasoning trace (all recorded thoughts)
+
+## Arguments
+
+| Argument | Default | Description |
+|----------|---------|-------------|
+| `hash` | `HEAD` | Neural commit hash (or prefix) |
+
+## Examples
+
+### Show Current Commit
+
+```bash
+agit show
+```
+
+Or explicitly:
+```bash
+agit show HEAD
+```
+
+### Show Specific Commit
+
+```bash
+agit show a3f7b2c
+```
+
+You can use a prefix of the hash:
+```bash
+agit show a3f
+```
+
+### Example Output
+
+```
+commit a3f7b2c
+Git:    e8d4f1a
+Date:   2024-01-15 10:45:32
+Parent: b5d8e3a
+
+    Add user authentication
+
+    Summary: Intent: Implement JWT auth. Plan: Add middleware with refresh tokens.
+
+Trace:
+  [10:30:15] user/intent: Add JWT-based authentication to the API
+  [10:30:45] ai/reasoning: Will implement auth middleware with access/refresh token pattern
+  [10:35:22] ai/decision: Using jsonwebtoken library for token handling
+  [10:40:18] ai/reasoning: Adding token refresh endpoint at /auth/refresh
+  [10:44:55] user/intent: Make sure tokens expire appropriately
+  [10:45:10] ai/reasoning: Setting access token to 15min, refresh to 7 days
+```
+
+## Trace Format
+
+The trace shows all entries recorded during the work session:
+
+```
+[timestamp] role/category: content
+```
+
+This gives you complete visibility into:
+- What the user asked for (intents)
+- How the AI approached it (reasoning)
+- Key decisions made along the way
+
+## Use Cases
+
+### Code Review
+
+Understand *why* changes were made:
+
+```bash
+agit show <commit-from-pr>
+```
+
+### Debugging
+
+Find out what approach was taken:
+
+```bash
+agit log
+agit show <problematic-commit>
+```
+
+### Knowledge Transfer
+
+New team members can understand historical decisions:
+
+```bash
+agit show <feature-commit>
+```
+
+## See Also
+
+- [agit log](/docs/commands/log) - Browse commit history
+- [agit status](/docs/commands/status) - View current staging area

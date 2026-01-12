@@ -1,0 +1,147 @@
+.hero {
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.heroLogo {
+  height: 120px;
+  margin-bottom: 1.5rem;
+}
+
+.heroTagline {
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 1rem;
+}
+
+.heroDescription {
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  color: var(--ifm-color-emphasis-600);
+  line-height: 1.6;
+}
+
+.heroButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Terminal */
+.terminal {
+  background: #1e1e1e;
+  border-radius: 8px;
+  max-width: 700px;
+  margin: 2rem auto;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.terminalHeader {
+  background: #3c3c3c;
+  padding: 0.75rem 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.terminalDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminalDot.red {
+  background: #ff5f56;
+}
+
+.terminalDot.yellow {
+  background: #ffbd2e;
+}
+
+.terminalDot.green {
+  background: #27c93f;
+}
+
+.terminalBody {
+  padding: 1rem;
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.terminalLine {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.terminalPrompt {
+  color: #27c93f;
+}
+
+.terminalCommand {
+  color: #fff;
+}
+
+.terminalOutput {
+  color: #888;
+}
+
+/* Features */
+.features {
+  padding: 3rem 0;
+}
+
+.features h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.featureCard {
+  padding: 1.5rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+}
+
+.featureCard h3 {
+  margin-bottom: 0.75rem;
+}
+
+.featureCard p {
+  color: var(--ifm-color-emphasis-600);
+  margin: 0;
+}
+
+.featureCard code {
+  font-size: 0.85rem;
+}
+
+/* How it works */
+.howItWorks {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.stepsList {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.stepsList li {
+  margin-bottom: 0.5rem;
+}
+
+/* CTA wrapper */
+.ctaWrapper {
+  text-align: center;
+  margin-top: 2rem;
+}

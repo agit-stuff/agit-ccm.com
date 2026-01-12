@@ -1,0 +1,135 @@
+---
+title: Changelog
+description: Release history and version notes
+sidebar_position: 3
+---
+
+## v1.3.0
+
+**Init Command Improvements**
+
+- `agit init --update` now shows "Already up to date." when protocol version matches
+- Added restart warning after init/update changes: "Restart your AI assistant to apply the updated AGIT memory protocol."
+- Improved version detection for protocol updates
+
+**MCP Tool Enhancements**
+
+`agit_log_step` improvements:
+- New `repo_path` parameter for cross-repo awareness - validates target repo matches current repo
+- Entries with all-invalid locations are now rejected entirely (not just locations stripped)
+- Improved error messages distinguishing rejected entries vs skipped locations
+
+Example with `repo_path`:
+```json
+{
+  "name": "agit_log_step",
+  "arguments": {
+    "repo_path": "/path/to/repo",
+    "batch": [...]
+  }
+}
+```
+
+---
+
+## v1.1.1
+
+**File Location Tracking**
+
+Neural context entries now include file path and line number where thoughts originated:
+
+```jsonl
+{"role":"ai","category":"reasoning","content":"...","file":"/src/auth.rs","line":42}
+```
+
+This enables better traceability between reasoning and specific code locations.
+
+---
+
+## v1.1.0
+
+**Git Workflow Resilience**
+
+Major improvements to handle advanced Git workflows:
+
+- **Merge/Rebase Guard** - Blocks mutating commands during merge or rebase to prevent graph corruption
+- **Amend Detection** - Automatically detects `git commit --amend` and migrates neural memory to the new hash
+- **Per-Branch Index Stashing** - Preserves pending thoughts when switching branches
+- **Rewind Detection** - Handles `git reset --hard` by snapping to valid ancestor
+
+See [Git Resilience](/docs/guides/git-resilience) for details.
+
+**Semantic Conflict Detection**
+
+Protects against "hallucinated" commits by detecting when external Git commits have modified files mentioned in pending thoughts:
+
+- Detects "ghost commits" (external changes since last neural commit)
+- Extracts file references from pending thoughts
+- Blocks commit if files overlap
+- Use `--force` to override
+
+**Search Functionality**
+
+Full-text search of reasoning history:
+
+```bash
+agit search query "authentication"
+agit search rebuild
+```
+
+Features:
+- Tantivy-based full-text indexing
+- Auto-indexing on commit
+- Incremental updates after pull
+- Manual rebuild support
+
+See [Search Command](/docs/commands/search) for details.
+
+**File History MCP Tool**
+
+New `agit_get_file_history` tool for retrieving neural commit history for specific files:
+
+```json
+{
+  "name": "agit_get_file_history",
+  "arguments": {
+    "filepath": "src/auth.rs",
+    "limit": 5
+  }
+}
+```
+
+Enables AI auto-context injection before modifying files.
+
+---
+
+## v1.0.0
+
+**Initial Release**
+
+Core neural commit system:
+
+- **Neural Graph** - Parallel commit graph linking reasoning to code
+- **Content-Addressable Storage** - SHA-256 object store
+- **MCP Integration** - Model Context Protocol server for AI editors
+- **Staging Area** - JSONL-based index for pending thoughts
+- **Synthesizer** - Deterministic summary generation
+
+**CLI Commands**
+- `agit init` - Initialize AGIT in a repository
+- `agit record` - Manually record thoughts
+- `agit add` - Stage files and freeze context
+- `agit status` - View current status
+- `agit commit` - Create neural + git commit
+- `agit log` - View commit history
+- `agit show` - Show full commit details
+
+**Editor Integrations**
+- Cursor (via `.cursorrules` and `.cursor/mcp.json`)
+- Claude Code (via `CLAUDE.md` and `.mcp.json`)
+
+**Installation Methods**
+- Homebrew (macOS)
+- Scoop (Windows)
+- Shell script (Linux/CI)
+- Cargo (from source)

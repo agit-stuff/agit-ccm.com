@@ -1,0 +1,138 @@
+---
+title: Quick Start
+description: Get started with AGIT in 5 minutes
+sidebar_position: 2
+---
+
+This guide will get you up and running with AGIT in just a few minutes.
+
+## How AGIT Works with Git
+
+AGIT is designed as a **transparent wrapper** around Git, following the principle of least surprise. You can continue using standard Git commands (`git add`, `git commit`, `git push`) exactly as before—AGIT hooks into Git's event system to capture context automatically.
+
+This approach follows industry best practices for developer tooling:
+- **Non-intrusive integration**: AGIT doesn't replace Git; it extends it
+- **Zero workflow disruption**: Your existing CI/CD pipelines, Git aliases, and muscle memory remain intact
+- **Graceful degradation**: If AGIT is unavailable, Git operations proceed normally
+
+When you run `git commit`, AGIT's post-commit hook automatically creates a corresponding neural commit, linking your reasoning to the code changes. You can also use `agit commit` for explicit control over both operations.
+
+## Initialize AGIT
+
+Navigate to your Git repository and initialize AGIT:
+
+```bash
+cd your-project
+agit init
+```
+
+This creates:
+- `.agit/` - Neural graph storage directory
+- `CLAUDE.md` - Instructions for Claude Code
+- `.cursorrules` - Instructions for Cursor
+- `.windsurfrules` - Instructions for Windsurf
+
+:::caution Important: Restart Required
+After running `agit init`, **restart your AI editor** (Cursor, Claude Code, Windsurf, etc.) to activate AGIT memory logging.
+:::
+
+## Record Your First Thought
+
+Manually record a thought to the staging area:
+
+```bash
+agit record "Planning to add user authentication"
+```
+
+:::info Automatic Recording with AI Editors
+In practice, you won't need to run `agit record` manually. When using AI-assisted editors like **Cursor** or **Claude Code**, your AI assistant automatically logs intents and reasoning through the MCP integration. The manual command is primarily useful for recording your own thoughts or when working without an AI editor.
+:::
+
+## Check Status
+
+See what's in your staging area:
+
+```bash
+agit status
+```
+
+Output:
+```
+AGIT Status
+Branch: main
+
+Staging area:
+  1 entries pending
+
+Recent entries:
+  [10:42:15] user/intent: Planning to add user authentication
+```
+
+## Create a Commit
+
+After making your code changes, stage and commit with AGIT:
+
+```bash
+# Stage your changes and freeze context
+agit add .
+
+# Create both git commit and neural commit in one command
+agit commit -m "Add user authentication"
+```
+
+Output:
+```
+Created git commit:    e8d4f1a
+Created neural commit: a3f7b2c
+
+Summary: Intent: Planning to add user authentication.
+```
+
+## View History
+
+See your commit history with context:
+
+```bash
+agit log
+```
+
+Output:
+```
+commit a3f7b2c (HEAD -> main)
+Git:    e8d4f1a
+Date:   2024-01-15 10:45:32
+
+    Add user authentication
+
+    Summary: Intent: Planning to add user authentication.
+```
+
+## View Full Context
+
+See the complete reasoning trace for a commit:
+
+```bash
+agit show a3f7b2c
+```
+
+This shows:
+- The commit summary
+- Linked git commit
+- Full trace of user intents and AI reasoning
+
+## Using with AI Editors
+
+The real power of AGIT comes from automatic logging. When using an AI editor like Cursor or Claude Code:
+
+1. **Your AI assistant reads** the generated rules files
+2. **While working**, it automatically logs thoughts via MCP
+3. **When you commit**, AGIT synthesizes the reasoning
+
+No manual `agit record` needed - everything happens automatically.
+
+## Next Steps
+
+- [Configure AGIT](/docs/getting-started/configuration) for your workflow
+- [Set up Cursor](/docs/guides/cursor-setup) for automatic logging
+- [Set up Claude Code](/docs/guides/claude-code-setup) for automatic logging
+- [Learn about MCP integration](/docs/guides/mcp-integration)

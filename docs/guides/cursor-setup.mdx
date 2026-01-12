@@ -1,0 +1,144 @@
+---
+title: Cursor Setup
+description: Configure Cursor AI to work with AGIT
+sidebar_position: 3
+---
+
+This guide shows you how to set up Cursor to automatically log thoughts to AGIT.
+
+## Prerequisites
+
+- [AGIT installed](/docs/getting-started/installation)
+- [Cursor](https://cursor.sh) installed
+- A Git repository with `agit init` run
+
+## Automatic Setup
+
+When you run `agit init`, a `.cursorrules` file is created automatically. This file tells Cursor how to log thoughts.
+
+:::caution Restart Required
+After running `agit init` or `agit init --update`, **restart Cursor** to load the updated AGIT configuration. The CLI will remind you:
+
+```
+Restart your AI assistant to activate AGIT memory.
+```
+:::
+
+## How It Works
+
+1. **Cursor reads `.cursorrules`** when opening your project
+2. **While working**, Cursor sees instructions to log thoughts
+3. **The AI calls** `agit_log_step` via MCP
+4. **Thoughts are stored** in `.agit/index`
+
+## Manual Configuration
+
+If you need to manually configure Cursor:
+
+### 1. Create `.cursorrules`
+
+```markdown
+# AGIT Integration
+
+When working on this project, log your thoughts using AGIT:
+
+1. When the user describes what they want, call:
+   agit_log_step(role="user", category="intent", content="<user's goal>")
+
+2. When you decide on an approach, call:
+   agit_log_step(role="ai", category="reasoning", content="<your plan>")
+
+3. Log significant decisions during implementation.
+
+This creates a reasoning trace that gets linked to commits.
+```
+
+### 2. Configure MCP (if needed)
+
+In Cursor settings, ensure the AGIT MCP server is configured:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "agit": {
+        "command": "agit",
+        "args": ["server"]
+      }
+    }
+  }
+}
+```
+
+## Verifying It Works
+
+1. Open your project in Cursor
+2. Ask Cursor to make a change
+3. Check the AGIT status:
+
+```bash
+agit status
+```
+
+You should see entries logged:
+
+```
+Staging area:
+  2 entries pending
+
+Recent entries:
+  [10:42:15] user/intent: Add validation to login form
+  [10:42:18] ai/reasoning: Will add Zod schema and error handling
+```
+
+## Best Practices
+
+### Be Specific in Requests
+
+The clearer your request, the better the logged intent:
+
+```
+❌ "Fix the bug"
+✅ "Fix the authentication bug where users can't log in with special characters in passwords"
+```
+
+### Let Cursor Explain
+
+Encourage Cursor to explain its approach:
+
+```
+"Before making changes, explain your approach"
+```
+
+This generates better reasoning traces.
+
+### Review Before Commit
+
+Check `agit status` before committing to ensure the logged thoughts make sense:
+
+```bash
+agit status
+# Review entries
+agit commit -m "Your message"
+```
+
+## Troubleshooting
+
+### Thoughts Not Being Logged
+
+1. Check `.cursorrules` exists and is valid
+2. Verify AGIT is initialized: `ls .agit`
+3. **Restart Cursor** - this is required after init or update
+4. If you updated AGIT, run `agit init --update` then restart again
+5. Try starting the server manually: `agit server`
+
+### MCP Connection Issues
+
+1. Restart Cursor
+2. Check MCP configuration in Cursor settings
+3. Enable debug logging: `RUST_LOG=debug agit server`
+
+## Next Steps
+
+- [Create your first commit](/docs/getting-started/quick-start)
+- [Learn about MCP integration](/docs/guides/mcp-integration)

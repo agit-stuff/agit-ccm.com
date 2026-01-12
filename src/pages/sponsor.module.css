@@ -1,0 +1,158 @@
+.header {
+  padding: 4rem 0 2rem;
+  text-align: center;
+}
+
+.header h1 {
+  margin-bottom: 1rem;
+}
+
+.description {
+  max-width: 600px;
+  margin: 0 auto;
+  color: var(--ifm-color-emphasis-600);
+  font-size: 1.1rem;
+}
+
+.section {
+  padding: 3rem 0;
+}
+
+.section h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  padding: 1.5rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+}
+
+.card h3 {
+  margin-bottom: 0.75rem;
+}
+
+.card p {
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 0.5rem;
+}
+
+.card a {
+  font-weight: 500;
+}
+
+/* Tiers */
+.tiersGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tierCard {
+  padding: 2rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  position: relative;
+  text-align: center;
+}
+
+.tierCard.featured {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.popularBadge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 0.25rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tierCard h3 {
+  margin-bottom: 0.5rem;
+}
+
+.amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.amount span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--ifm-color-emphasis-500);
+}
+
+.tierCard ul {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  padding-left: 0;
+  list-style: none;
+}
+
+.tierCard ul li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-100);
+}
+
+.tierCard ul li:last-child {
+  border-bottom: none;
+}
+
+/* One time */
+.oneTime {
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 2rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+}
+
+.oneTime p {
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 1.5rem;
+}
+
+/* Sponsors placeholder */
+.sponsorsPlaceholder {
+  text-align: center;
+  padding: 2rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  background: var(--ifm-background-surface-color);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.sponsorsPlaceholder p {
+  color: var(--ifm-color-emphasis-500);
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.logoPlaceholder {
+  padding: 2rem;
+  border: 2px dashed var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  color: var(--ifm-color-emphasis-400);
+}

@@ -1,6 +1,6 @@
-# agit Documentation Website
+# AGIT Documentation Website
 
-Official documentation site for [agit](https://github.com/agit-stuff/agit), the AI-native Git wrapper.
+Official documentation site for [AGIT](https://github.com/agit-stuff/agit), the AI-native Git wrapper.
 
 **Live site: https://agit-stuff.github.io/**
 
@@ -15,12 +15,14 @@ npm run dev
 
 # Build for production
 npm run build
+
+# Preview production build
+npm run serve
 ```
 
 ## Built With
 
-- [Astro](https://astro.build/)
-- [Starlight](https://starlight.astro.build/)
+- [Docusaurus](https://docusaurus.io/)
 
 ## License
 
