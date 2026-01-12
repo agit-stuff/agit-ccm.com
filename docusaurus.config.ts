@@ -7,7 +7,7 @@ const config: Config = {
   tagline: 'AI-Native Git Wrapper',
   favicon: 'img/favicon.ico',
 
-  url: 'https://agit-stuff.github.io',
+  url: 'https://agit-ccm.com',
   baseUrl: '/',
 
   organizationName: 'agit-stuff',

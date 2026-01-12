@@ -12,7 +12,8 @@
       "Bash(cargo test:*)",
       "mcp__agit__agit_read_roadmap",
       "Bash(npm install:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(git push:*)"
     ]
   }
 }
